@@ -6,9 +6,9 @@ port = 8090
 host = "127.0.0.1"
 
 
-@app.route("/")
-def main():
-    return render_template("main.html", title="123")
+@app.route("/<title>")
+def main(title):
+    return render_template("main.html", title=title)
 
 
 if __name__ == '__main__':
