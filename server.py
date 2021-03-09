@@ -11,5 +11,10 @@ def main(title):
     return render_template("main.html", title=title)
 
 
+@app.route("/training/<prof>")
+def training(prof):
+    return render_template("training.html", prof=prof, title=prof)
+
+
 if __name__ == '__main__':
     app.run(port=port, host=host)

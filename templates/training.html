@@ -1,0 +1,11 @@
+{% extends "base.html"%}
+
+{% block content %}
+{% if "инженер" in prof or "строитель" in prof %}
+<h1>Инженерные тренажеры</h1>
+<img src="https://media.moddb.com/cache/images/members/1/186/185208/thumb_620x2000/Millenium_Falcon_04.jpg" alt="Инженерные тренажеры.jpg">
+{% else %}
+<h1>Научные симуляторы</h1>
+<img src="https://i.pinimg.com/736x/92/83/e6/9283e68f51d1dc91e6c239a8febd07b7--concept-art-transportation.jpg" alt="Научные симуляторы.jpg">
+{% endif %}
+{% endblock %}
