@@ -1,0 +1,11 @@
+{% extends "base.html"%}
+
+{% block content %}
+<h4>Фамилия: {{questionnaire["surname"]}}</h4>
+<h4>Имя: {{questionnaire["name"]}}</h4>
+<h4>Образование: {{questionnaire["education"]}}</h4>
+<h4>Профессия: {{questionnaire["profession"]}}</h4>
+<h4>Пол: {{questionnaire["sex"]}}</h4>
+<h4>Мотивация: {{questionnaire["motivation"]}}</h4>
+<h4>Готовы остаться на Марсе? {{questionnaire["ready"]}}</h4>
+{% endblock %}
