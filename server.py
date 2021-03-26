@@ -1,8 +1,14 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
+from forms.loginform import LoginForm
+import json
 
 app = Flask(__name__)
 port = 8080
 host = "127.0.0.1"
+
+with open("settings.json") as file:
+    data = json.load(file)
+    app.config['SECRET_KEY'] = data["SECRET_KEY"]
 
 
 @app.route("/")
@@ -31,6 +37,15 @@ def answer():
                      "motivation": "Всегда мечтал застрять на Марсе!",
                      "ready": "True"}
     return render_template("auto_answer.html", title=questionnaire["title"], questionnaire=questionnaire)
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    print(0)
+    if form.validate_on_submit():
+        return redirect('/answer')
+    return render_template('login.html', title='Авторизация', form=form)
 
 
 if __name__ == '__main__':
