@@ -1,0 +1,34 @@
+{
+  "crew members": [
+    {
+      "name": "Ридли",
+      "surname": "Скотт",
+      "photo": "../static/img/standard_photo.jpg",
+      "specialties": "Капитан"
+    },
+    {
+      "name": "Энди",
+      "surname": "Уир",
+      "photo": "../static/img/standard_photo.jpg",
+      "specialties": "Электрик"
+    },
+    {
+      "name": "Марк",
+      "surname": "Уотни",
+      "photo": "../static/img/standard_photo.jpg",
+      "specialties": "Врач"
+    },
+    {
+      "name": "Тедди",
+      "surname": "Сандерс",
+      "photo": "../static/img/standard_photo.jpg",
+      "specialties": "Инженер"
+    },
+    {
+      "name": "Шон",
+      "surname": "Бин",
+      "photo": "../static/img/standard_photo.jpg",
+      "specialties": "Научный сотрудник"
+    }
+  ]
+}

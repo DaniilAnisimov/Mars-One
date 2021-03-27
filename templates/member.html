@@ -1,0 +1,10 @@
+{% extends "base.html"%}
+
+{% block content %}
+{% set data = data|random %}
+<div align="center">
+    {{data["name"]}} {{data["surname"]}}<br>
+    <img src={{data["photo"]}} width="400px" height="500px"><br>
+    {{data["specialties"]}}
+</div><br>
+{% endblock %}

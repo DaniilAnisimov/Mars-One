@@ -60,5 +60,12 @@ def table(sex, age):
     return render_template('table.html', title="", sex=sex, age=age)
 
 
+@app.route("/member")
+def member():
+    with open("templates/crew.json", encoding="utf-8") as f:
+        d = json.load(f)["crew members"]
+    return render_template('member.html', data=d)
+
+
 if __name__ == '__main__':
     app.run(port=port, host=host)
