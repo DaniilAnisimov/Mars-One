@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect
 from forms.loginform import LoginForm
 import json
+import random
 
 app = Flask(__name__)
 port = 8080
@@ -42,10 +43,16 @@ def answer():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    print(0)
     if form.validate_on_submit():
         return redirect('/answer')
     return render_template('login.html', title='Авторизация', form=form)
+
+
+@app.route("/distribution")
+def distribution():
+    astronauts = ["Ридли Скотт", "Энди Уир", "Марк Уотни",
+                  "Венката Капур", "Тедди Сандерс", "Шон Бин"]
+    return render_template('distribution.html', astronauts=astronauts)
 
 
 if __name__ == '__main__':
