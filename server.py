@@ -1,7 +1,8 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request, url_for
 from forms.loginform import LoginForm
 import json
-import random
+import datetime
+import os
 
 app = Flask(__name__)
 port = 8080
@@ -65,6 +66,21 @@ def member():
     with open("templates/crew.json", encoding="utf-8") as f:
         d = json.load(f)["crew members"]
     return render_template('member.html', data=d)
+
+
+@app.route("/gallery", methods=["POST", "GET"])
+def gallery():
+    if request.method == "GET":
+        filenames = []
+        for name in os.listdir("static/img/gallery/"):
+            filenames.append(url_for('static', filename=f'/img/gallery/{name}'))
+        return render_template('gallery.html', filenames=filenames, l=len(filenames))
+    elif request.method == "POST":
+        if request.files["file"]:
+            with open(f"""static/img/gallery/im-{
+            datetime.datetime.now().strftime(f"%Y-%m-%dT%H-%M-%S.%f")[:-4] + "Z"}.png""", "wb") as i:
+                i.write(request.files["file"].read())
+        return redirect("/gallery")
 
 
 if __name__ == '__main__':
