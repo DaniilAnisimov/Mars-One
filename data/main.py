@@ -1,5 +1,9 @@
 from data import db_session
 from data.users import User
+from data.jobs import Jobs
+
+db_session.global_init("../db/mars_explorer.db")
+db_sess = db_session.create_session()
 
 list_user = [
     {
@@ -40,16 +44,36 @@ list_user = [
     }
 ]
 
-db_session.global_init("../db/mars_explorer.db")
-db_sess = db_session.create_session()
 for data_user in list_user:
-    user = User()
-    user.surname = data_user["surname"]
-    user.name = data_user["name"]
-    user.age = data_user["age"]
-    user.position = data_user["position"]
-    user.speciality = data_user["speciality"]
-    user.address = data_user["address"]
-    user.email = data_user["email"]
-    db_sess.add(user)
+    if data_user["email"] not in list(map(lambda x: x.email, db_sess.query(User).all())):
+        user = User()
+        user.surname = data_user["surname"]
+        user.name = data_user["name"]
+        user.age = data_user["age"]
+        user.position = data_user["position"]
+        user.speciality = data_user["speciality"]
+        user.address = data_user["address"]
+        user.email = data_user["email"]
+        db_sess.add(user)
+        db_sess.commit()
+
+list_job = [
+    {
+        "team_leader": 1,
+        "job": "deployment of residential modules 1 and 2",
+        "work_size": 15,
+        "collaborators": "2, 3",
+        "is_finished": False
+    }
+]
+
+
+for data_job in list_job:
+    job = Jobs()
+    job.team_leader = data_job["team_leader"]
+    job.job = data_job["job"]
+    job.work_size = data_job["work_size"]
+    job.collaborators = data_job["collaborators"]
+    job.is_finished = data_job["is_finished"]
+    db_sess.add(job)
     db_sess.commit()
