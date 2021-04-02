@@ -3,6 +3,8 @@ from forms.loginform import LoginForm
 import json
 import datetime
 import os
+from data import db_session
+from data.jobs import Jobs
 
 app = Flask(__name__)
 port = 8080
@@ -16,7 +18,9 @@ with open("settings.json") as file:
 @app.route("/")
 @app.route("/<title>")
 def main(title=""):
-    return render_template("base.html", title=title)
+    db_sess = db_session.create_session()
+    jobs = db_sess.query(Jobs).all()
+    return render_template("main.html", title=title, jobs=jobs)
 
 
 @app.route("/training/<prof>")
@@ -84,4 +88,5 @@ def gallery():
 
 
 if __name__ == '__main__':
+    db_session.global_init("db/mars_explorer.db")
     app.run(port=port, host=host)
