@@ -3,7 +3,10 @@ import json
 import datetime
 import os
 
+from flask_login import LoginManager, login_user
+
 from forms.loginform import LoginForm
+from forms.emergency_access_form import EmergencyAccessForm
 from forms.user import RegisterForm
 
 from data import db_session
@@ -14,9 +17,18 @@ app = Flask(__name__)
 port = 8080
 host = "127.0.0.1"
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 with open("settings.json") as file:
     data = json.load(file)
     app.config['SECRET_KEY'] = data["SECRET_KEY"]
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
 @app.route("/")
@@ -49,9 +61,9 @@ def answer():
     return render_template("auto_answer.html", title=questionnaire["title"], questionnaire=questionnaire)
 
 
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
+@app.route("/emergency_access", methods=['GET', 'POST'])
+def emergency_access():
+    form = EmergencyAccessForm()
     if form.validate_on_submit():
         return redirect('/answer')
     return render_template('login.html', title='Авторизация', form=form)
@@ -104,20 +116,34 @@ def register():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-        user = User(
-            surname=form.surname.data,
-            name=form.name.data,
-            age=form.age.data,
-            position=form.position.data,
-            speciality=form.speciality.data,
-            address=form.address.data,
-            email=form.email.data
-        )
+        user = User()
+        user.surname = form.surname.data
+        user.name = form.name.data
+        user.age = form.age.data
+        user.position = form.position.data
+        user.speciality = form.speciality.data
+        user.address = form.address.data
+        user.email = form.email.data
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
         return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
+    return render_template('login.html', title='Авторизация', form=form)
 
 
 if __name__ == '__main__':
