@@ -2,7 +2,7 @@
 
 {% block content %}
 {% if current_user.is_authenticated %}
-    <a href="addjob" class="btn btn-secondary">Добавить новость</a>
+<a href="addjob" class="btn btn-secondary">Добавить новость</a>
 {% endif %}
 <h3 align="center">Журнал работ</h3>
 {% for job in jobs %}
@@ -26,5 +26,15 @@
         {% endif %}
     </tr>
 </table><br>
+{% if current_user.is_authenticated and (current_user == job.leader or current_user.id == 1) %}
+<div>
+    <a href="/jobs/{{ job.id }}" class="btn btn-warning">
+        Изменить
+    </a>
+    <a href="/jobs_delete/{{ job.id }}" class="btn btn-danger">
+        Удалить
+    </a>
+</div>
+{% endif %}
 {% endfor %}
 {% endblock %}
