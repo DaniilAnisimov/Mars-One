@@ -1,6 +1,7 @@
 {% extends "base.html"%}
 
 {% block content %}
+<a href="department" class="btn btn-secondary">Департаменты</a>
 {% if current_user.is_authenticated %}
 <a href="addjob" class="btn btn-secondary">Добавить новость</a>
 {% endif %}
