@@ -14,12 +14,15 @@
         <th>Team leader</th>
         <th>Duration</th>
         <th>List of collaborators</th>
+        <th>Hazard category</th>
         <th>is finished</th>
     </tr>
     <tr>
+        <td>{{job.job}}</td>
         <td>{{job.leader.surname}} {{job.leader.name}}</td>
         <td>{{job.work_size}} hours</td>
         <td>{{job.collaborators}}</td>
+        <td>{{" ".join(job.categories)}}</td>
         {% if job.is_finished %}
         <td>finished</td>
         {% else %}
