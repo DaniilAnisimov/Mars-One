@@ -2,7 +2,6 @@ from flask import Flask, render_template, redirect, request, url_for, abort
 import json
 import datetime
 import os
-
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 from forms.loginform import LoginForm
@@ -11,7 +10,7 @@ from forms.user import RegisterForm
 from forms.jobs import JobForm
 from forms.department import DepartmentsForm
 
-from data import db_session
+from data import db_session, jobs_api
 from data.jobs import Jobs
 from data.users import User
 from data.department import Department
@@ -19,6 +18,8 @@ from data.department import Department
 app = Flask(__name__)
 port = 8080
 host = "127.0.0.1"
+
+app.register_blueprint(jobs_api.blueprint)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
