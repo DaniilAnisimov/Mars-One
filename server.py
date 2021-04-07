@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, abort
+from flask import Flask, render_template, redirect, request, url_for, abort, make_response, jsonify
 import json
 import datetime
 import os
@@ -302,6 +302,11 @@ def _department():
     db_sess = db_session.create_session()
     departments = db_sess.query(Department).all()
     return render_template("department.html", departments=departments)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 import flask
-from flask import jsonify
+from flask import jsonify, request
 
 from . import db_session
 from .jobs import Jobs
@@ -42,3 +42,26 @@ def get_one_jobs(jobs_id):
                                        'is_finished'))
         }
     )
+
+
+@blueprint.route('/api/jobs', methods=['POST'])
+def create_jobs():
+    rjs = request.json
+    if not rjs:
+        return jsonify({'error': 'Empty request'})
+    elif not all(key in rjs for key in
+                 ['id', 'team_leader', 'job', 'work_size', 'collaborators', 'is_finished']):
+        return jsonify({'error': 'Bad request'})
+    db_sess = db_session.create_session()
+    job = db_sess.query(Jobs).filter(Jobs.id == rjs["id"]).first()
+    if job:
+        return jsonify({'error': 'Id already exists'})
+    job = Jobs(id=rjs['team_leader'],
+               team_leader=rjs['team_leader'],
+               job=rjs['job'],
+               work_size=rjs['work_size'],
+               collaborators=rjs['collaborators'],
+               is_finished=rjs['is_finished'])
+    db_sess.add(job)
+    db_sess.commit()
+    return jsonify({'success': 'OK'})
