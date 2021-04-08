@@ -76,3 +76,31 @@ def delete_jobs(jobs_id):
     db_sess.delete(jobs)
     db_sess.commit()
     return jsonify({'success': 'OK'})
+
+
+# Принимает несколько ключей таблицы Jobs
+@blueprint.route('/api/jobs/<int:jobs_id>', methods=['PUT'])
+def change_jobs(jobs_id):
+    rjs = request.json
+    keys = ['team_leader', 'job', 'work_size', 'collaborators', 'is_finished']
+    if not rjs:
+        return jsonify({'error': 'Empty request'})
+    elif not all(key in keys for key in rjs):
+        return jsonify({'error': 'Bad request'})
+    db_sess = db_session.create_session()
+    job = db_sess.query(Jobs).filter(Jobs.id == jobs_id).first()
+    if job is None:
+        return jsonify({'error': 'Id already exists'})
+    for key, value in rjs.items():
+        if key == "job":
+            job.job = value
+        elif key == "team_leader":
+            job.team_leader = value
+        elif key == "work_size":
+            job.work_size = value
+        elif key == "collaborators":
+            job.collaborators = value
+        elif key == "is_finished":
+            job.is_finished = value
+    db_sess.commit()
+    return jsonify({'success': 'OK'})
