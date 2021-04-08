@@ -56,12 +56,23 @@ def create_jobs():
     job = db_sess.query(Jobs).filter(Jobs.id == rjs["id"]).first()
     if job:
         return jsonify({'error': 'Id already exists'})
-    job = Jobs(id=rjs['team_leader'],
+    job = Jobs(id=rjs['id'],
                team_leader=rjs['team_leader'],
                job=rjs['job'],
                work_size=rjs['work_size'],
                collaborators=rjs['collaborators'],
                is_finished=rjs['is_finished'])
     db_sess.add(job)
+    db_sess.commit()
+    return jsonify({'success': 'OK'})
+
+
+@blueprint.route('/api/jobs/<int:jobs_id>', methods=['DELETE'])
+def delete_jobs(jobs_id):
+    db_sess = db_session.create_session()
+    jobs = db_sess.query(Jobs).get(jobs_id)
+    if not jobs:
+        return jsonify({'error': 'Not found'})
+    db_sess.delete(jobs)
     db_sess.commit()
     return jsonify({'success': 'OK'})
