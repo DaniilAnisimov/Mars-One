@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for, abort, make_response, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_restful import Api
 
 from forms.loginform import LoginForm
 from forms.emergency_access_form import EmergencyAccessForm
@@ -11,6 +12,7 @@ from data import db_session, jobs_api, users_api
 from data.jobs import Jobs
 from data.users import User
 from data.department import Department
+from data import users_resources
 
 from requests import get
 
@@ -22,11 +24,16 @@ import json
 import os
 
 app = Flask(__name__)
+api = Api(app)
+
 port = 8080
 host = "127.0.0.1"
 
 app.register_blueprint(jobs_api.blueprint)
 app.register_blueprint(users_api.blueprint)
+
+api.add_resource(users_resources.UsersListResource, '/api/v2/users')
+api.add_resource(users_resources.UsersResource, '/api/v2/users/<int:user_id>')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
