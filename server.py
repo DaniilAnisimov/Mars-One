@@ -12,7 +12,7 @@ from data import db_session, jobs_api, users_api
 from data.jobs import Jobs
 from data.users import User
 from data.department import Department
-from data import users_resources
+from data import users_resources, jobs_resource
 
 from requests import get
 
@@ -34,6 +34,9 @@ app.register_blueprint(users_api.blueprint)
 
 api.add_resource(users_resources.UsersListResource, '/api/v2/users')
 api.add_resource(users_resources.UsersResource, '/api/v2/users/<int:user_id>')
+
+api.add_resource(jobs_resource.JobsListResource, '/api/v2/jobs')
+api.add_resource(jobs_resource.JobsResource, '/api/v2/jobs/<int:job_id>')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
