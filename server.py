@@ -10,7 +10,7 @@ from forms.user import RegisterForm
 from forms.jobs import JobForm
 from forms.department import DepartmentsForm
 
-from data import db_session, jobs_api
+from data import db_session, jobs_api, users_api
 from data.jobs import Jobs
 from data.users import User
 from data.department import Department
@@ -20,6 +20,7 @@ port = 8080
 host = "127.0.0.1"
 
 app.register_blueprint(jobs_api.blueprint)
+app.register_blueprint(users_api.blueprint)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
