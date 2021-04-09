@@ -1,7 +1,4 @@
 from flask import Flask, render_template, redirect, request, url_for, abort, make_response, jsonify
-import json
-import datetime
-import os
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 from forms.loginform import LoginForm
@@ -14,6 +11,15 @@ from data import db_session, jobs_api, users_api
 from data.jobs import Jobs
 from data.users import User
 from data.department import Department
+
+from requests import get
+
+from tools.spn import spn
+
+import requests
+import datetime
+import json
+import os
 
 app = Flask(__name__)
 port = 8080
@@ -308,6 +314,39 @@ def _department():
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+@app.route("/users_show/<int:user_id>", methods=["GET"])
+def users_show(user_id):
+    user = get(f"http://localhost:8080/api/users/{user_id}").json()["user"]
+    if user == {'error': 'Not found'}:
+        pass
+    geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
+    geocoder_params = {
+        "apikey": data["apikey"],
+        "geocode": user["city_from"],
+        "format": "json"}
+    response = requests.get(geocoder_api_server, params=geocoder_params)
+    if not response:
+        return f"Ошибка выполнения запроса:\nHttp статус: {response.status_code} ( {response.reason} )"
+
+    json_response = response.json()
+    toponym = json_response["response"]["GeoObjectCollection"][
+        "featureMember"][0]["GeoObject"]
+
+    delta = toponym["boundedBy"]["Envelope"]
+    lon, lat = toponym["Point"]["pos"].split()
+    params = {
+        "ll": ",".join([lon, lat]),
+        "l": "sat",
+        "size": "450,450",
+        "spn": spn(delta["lowerCorner"], delta["upperCorner"]),
+        "pt": ",".join([str(float(lon) + 0.0003), str(float(lat) + 0.0001)]) + ",flag"
+    }
+    api_server = "http://static-maps.yandex.ru/1.x/"
+    response = requests.get(api_server, params=params).url
+    return render_template("users_show.html", name=user["name"], surname=user["surname"],
+                           city=user["city_from"], picture=response)
 
 
 if __name__ == '__main__':

@@ -13,7 +13,8 @@ list_user = [
         "position": "captain",
         "speciality": "research engineer",
         "address": "module_1",
-        "email": "scott_chief@mars.org"
+        "email": "scott_chief@mars.org",
+        "city_from": "Венеция"
     },
     {
         "surname": "Бин",
@@ -22,7 +23,8 @@ list_user = [
         "position": "помощник капитана",
         "speciality": "доктор",
         "address": "module_1",
-        "email": "sean_bean@mars.org"
+        "email": "sean_bean@mars.org",
+        "city_from": "Тунис"
     },
     {
         "surname": "Уитни",
@@ -31,7 +33,8 @@ list_user = [
         "position": "бортинженер",
         "speciality": "инженер",
         "address": "module_1",
-        "email": "mark_whitney@mars.org"
+        "email": "mark_whitney@mars.org",
+        "city_from": "Афины"
     },
     {
         "surname": "Уир",
@@ -40,7 +43,8 @@ list_user = [
         "position": "космонавт-исследователь",
         "speciality": "доктор",
         "address": "module_1",
-        "email": "andy_weir@mars.org"
+        "email": "andy_weir@mars.org",
+        "city_from": "Арвидсъяур"
     }
 ]
 
@@ -54,6 +58,7 @@ for data_user in list_user:
         user.speciality = data_user["speciality"]
         user.address = data_user["address"]
         user.email = data_user["email"]
+        user.city_from = data_user["city_from"]
         db_sess.add(user)
         db_sess.commit()
 
