@@ -42,7 +42,6 @@ def answer():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    print(0)
     if form.validate_on_submit():
         return redirect('/answer')
     return render_template('login.html', title='Авторизация', form=form)
