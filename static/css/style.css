@@ -15,27 +15,3 @@ background: #19b8fc;
 .ma {
 background: #1965fc;
 }
-
-
-table {
-font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-font-size: 14px;
-border-collapse: collapse;
-text-align: center;
-}
-th, td:first-child {
-background: #a6a6a6;
-color: white;
-padding: 10px 20px;
-}
-th, td {
-border-style: solid;
-border-width: 0 1px 1px 0;
-border-color: white;
-}
-td {
-background: #dbd7d3;
-}
-th:first-child, td:first-child {
-text-align: left;
-}
